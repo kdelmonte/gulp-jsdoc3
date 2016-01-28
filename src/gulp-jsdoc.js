@@ -29,6 +29,13 @@ var debug = require('debug')('gulp-jsdoc3');
 export function jsdoc(config, done) {
     var files = [];
     var jsdocConfig = config || require('./jsdocConfig.json');
+    var hasUserSpecifiedTemplate = false;
+    var args;
+
+    if(jsdocConfig.templates && jsdocConfig.templates.default && jsdocConfig.templates.default.layoutFile){
+        hasUserSpecifiedTemplate = true;
+    }
+   
 
     // Prevent some errors
     if (typeof done !== 'function') {
@@ -62,8 +69,15 @@ export function jsdoc(config, done) {
                 const spawn = require('child_process').spawn,
                     cmd = require.resolve('jsdoc/jsdoc.js'), // Needed to handle npm3 - find the binary anywhere
                     inkdocstrap = path.dirname(require.resolve('ink-docstrap'));
+                
+                args = ['-c', tmpobj.name];
+                
                 // Config + ink-docstrap
-                const args = ['-c', tmpobj.name, '-t', inkdocstrap].concat(files);
+                if(!hasUserSpecifiedTemplate){
+                    args = args.concat(['-t', inkdocstrap]);
+                }                
+
+                args = args.concat(files);
 
                 debug(cmd + ' ' + args.join(' '));
 
