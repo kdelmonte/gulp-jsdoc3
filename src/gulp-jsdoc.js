@@ -35,7 +35,6 @@ export function jsdoc(config, done) {
     if(jsdocConfig.templates && jsdocConfig.templates.default && jsdocConfig.templates.default.layoutFile){
         hasUserSpecifiedTemplate = true;
     }
-   
 
     // Prevent some errors
     if (typeof done !== 'function') {
